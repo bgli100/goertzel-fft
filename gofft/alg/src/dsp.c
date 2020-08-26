@@ -1,12 +1,13 @@
 #include <stdlib.h>
 #include "dsp.h"
 
-double goertzel(double* data, long data_len, int fs, double ft, 
+Py_complex goertzel(double* data, long data_len, int fs, double ft, 
                 int filter_size)
 {
     double k;		// Related to frequency bins
     double omega;
-    double sine, cosine, coeff, sf, mag;
+    double sine, cosine, coeff, sf;
+    Py_complex mag;
     double q0, q1, q2, real, imag;
     long int i;
     long int dlen;
@@ -39,7 +40,7 @@ double goertzel(double* data, long data_len, int fs, double ft,
 
     real = (q1 - q2*cosine)/sf;
     imag = (q2*sine)/sf;
-    mag = sqrt(real*real + imag*imag);
+    mag = (Py_complex) {.real = real, .imag = imag};
 
     return mag;
 }

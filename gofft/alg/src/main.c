@@ -8,7 +8,6 @@ static PyObject* dsp_goertzel(PyObject* self, PyObject* args)
     double ft;
     long int data_len;
     double *data;
-    double mag;
 
     if(!PyArg_ParseTuple(args, "O!idi",
         &PyArray_Type, &ap, &fs, &ft, &filter_size)) {
@@ -20,14 +19,12 @@ static PyObject* dsp_goertzel(PyObject* self, PyObject* args)
     // PyArray_GETCONTIGUOUS will increase the reference count.
     ap = PyArray_GETCONTIGUOUS(ap);
 
-    data = (double *)PyArray_DATA((PyArrayObject *)ap);
+    data = (double*)PyArray_DATA((PyArrayObject *)ap);
     data_len = (long int)PyArray_DIM(ap, 0);
-
-    mag = goertzel(data, data_len, fs, ft, filter_size);
 
     // Decrease the reference count of ap.
     Py_DECREF(ap);
-    return Py_BuildValue("d", mag);
+    return Py_BuildValue("D", goertzel(data, data_len, fs, ft, filter_size));
 }
 
 static PyObject* dsp_goertzel_m(PyObject* self, PyObject* args)
